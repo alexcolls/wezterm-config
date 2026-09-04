@@ -169,7 +169,7 @@ config.line_height = 1.3
 -- Window
 -- ---------------------------------------------------------------------------
 config.window_decorations = 'NONE'
-config.window_background_opacity = 0.8
+config.window_background_opacity = 0.65
 config.macos_window_background_blur = 30
 config.window_padding = { left = 20, right = 20, top = 20, bottom = 20 }
 
