@@ -1,0 +1,46 @@
+# Global gitignore — noise that should never land in any repo.
+
+# --- OS ---------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+Desktop.ini
+*~
+.fuse_hidden*
+.directory
+.nfs*
+
+# --- editors ----------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+.netrwhist
+tags
+
+# --- environments & secrets -------------------------------------------------
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# --- languages / tooling ----------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+node_modules/
+.pnpm-store/
+dist/
+build/
+target/
+*.log
+.cache/

@@ -1,0 +1,140 @@
+# Shared git configuration.
+#
+# This file is *included* from ~/.gitconfig rather than replacing it, so your
+# identity, credentials and any per-machine settings stay in ~/.gitconfig:
+#
+#   [include]
+#       path = /path/to/wezterm-config/config/git/gitconfig
+#
+# Anything you set in ~/.gitconfig after the include wins over what's here.
+
+[core]
+	# editor: falls back to $EDITOR (set in config/shell/exports.sh)
+	pager = less -FRX
+	autocrlf = input
+	excludesfile = ~/.gitignore_global
+	whitespace = trailing-space,space-before-tab
+
+[init]
+	defaultBranch = main
+
+[push]
+	default = simple
+	autoSetupRemote = true          # `git push` on a new branch just works
+	followTags = true
+
+[pull]
+	rebase = true                    # no accidental merge commits
+
+[fetch]
+	prune = true                     # drop refs for branches deleted upstream
+	pruneTags = true
+
+[rebase]
+	autoStash = true
+	autoSquash = true
+
+[merge]
+	conflictstyle = zdiff3           # show the common ancestor in conflicts (git >= 2.35)
+
+[diff]
+	algorithm = histogram
+	colorMoved = zebra
+	renames = copies
+	mnemonicPrefix = true
+
+[branch]
+	sort = -committerdate            # most recent branches first
+
+[log]
+	date = iso
+
+[status]
+	showUntrackedFiles = all
+	submoduleSummary = true
+
+[rerere]
+	enabled = true                   # remember how you resolved a conflict
+	autoupdate = true
+
+[help]
+	autocorrect = prompt
+
+[commit]
+	verbose = true                   # show the diff while writing the message
+
+[apply]
+	whitespace = fix
+
+[color]
+	ui = auto
+
+# Palette matched to the WezTerm "Cyberpunk Base" theme.
+[color "branch"]
+	current = magenta bold
+	local = white
+	remote = cyan
+
+[color "diff"]
+	meta = yellow
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+
+[color "status"]
+	added = green bold
+	changed = yellow
+	untracked = cyan
+
+[alias]
+	# --- status / navigation
+	s = status -sb
+	st = status
+	co = checkout
+	sw = switch
+	swc = switch -c
+	br = branch
+	cb = rev-parse --abbrev-ref HEAD
+
+	# --- staging
+	a = add
+	aa = add -A
+	ap = add -p
+	unstage = restore --staged
+	discard = restore
+
+	# --- committing
+	c = commit -v
+	cm = commit -m
+	ca = commit -v --amend
+	amend = commit --amend --no-edit
+	wip = "!git add -A && git commit -m 'wip: work in progress'"
+
+	# --- history
+	l = log --oneline --graph --decorate -20
+	lg = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
+	last = log -1 HEAD --stat
+	who = shortlog -sn --no-merges
+	today = log --since=midnight --oneline --author-date-order
+
+	# --- diffing
+	d = diff
+	ds = diff --staged
+	dw = diff --word-diff
+
+	# --- syncing
+	p = push
+	pl = pull
+	f = fetch --all --prune
+	sync = "!git fetch --all --prune && git pull --rebase"
+
+	# --- undo
+	undo = reset --soft HEAD~1
+	nuke = reset --hard HEAD
+	uncommit = reset --mixed HEAD~1
+
+	# --- housekeeping
+	cleanup = "!git branch --merged | grep -vE '^\\*|^\\+|main$|master$|develop$' | xargs -r git branch -d"
+	root = rev-parse --show-toplevel
+	aliases = "!git config --get-regexp '^alias\\.' | sed 's/^alias\\.//' | sort"

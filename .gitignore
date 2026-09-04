@@ -1,0 +1,6 @@
+# Machine-specific shell settings — created from local.sh.example on install.
+config/shell/local.sh
+
+# Editor / OS noise
+*.swp
+.DS_Store

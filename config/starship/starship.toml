@@ -1,0 +1,27 @@
+# Get rid of the newline at the start
+add_newline = false
+
+# Custom Format: Just the Directory and the Character
+format = """
+$directory\
+$git_branch\
+$character\
+"""
+
+[directory]
+style = "bold #01FFC3" # Bright Teal/Mint
+truncation_length = 3
+truncation_symbol = "…/"
+
+[character]
+success_symbol = "[❯](bold #F70A8D)" # Hot Pink Arrow
+error_symbol = "[❯](bold #FF2E63)"   # Red Arrow if command fails
+
+[git_branch]
+symbol = " "
+style = "bold #05D9E8" # Electric Cyan
+
+# Disable the AWS/Cloud module that you didn't like
+[aws]
+disabled = true
+

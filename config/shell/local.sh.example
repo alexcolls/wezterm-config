@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Copy to local.sh for machine-specific settings. local.sh is gitignored, so
+# keys, hostnames and per-box toolchains stay off GitHub.
+#
+#   cp config/shell/local.sh.example config/shell/local.sh
+# shellcheck shell=bash
+
+# --- CUDA -------------------------------------------------------------------
+# export CUDA_HOME=/usr/local/cuda-12.8
+# export PATH="$CUDA_HOME/bin:$PATH"
+# export LD_LIBRARY_PATH="$CUDA_HOME/lib64:$LD_LIBRARY_PATH"
+
+# --- HashiCorp Vault --------------------------------------------------------
+# export VAULT_ADDR='https://127.0.0.1:8200'
+# export VAULT_SKIP_VERIFY=1
+
+# --- other per-machine bits -------------------------------------------------
+# source "$HOME/.railway/env"
+# source "$HOME/.safe-chain/scripts/init-posix.sh"
+# export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
