@@ -169,7 +169,8 @@ config.line_height = 1.3
 -- Window
 -- ---------------------------------------------------------------------------
 config.window_decorations = 'NONE'
-config.window_background_opacity = 0.65
+config.front_end = 'OpenGL' -- WebGpu default ignores alpha on some Mesa drivers
+config.window_background_opacity = 0.7
 config.macos_window_background_blur = 30
 config.window_padding = { left = 20, right = 20, top = 20, bottom = 20 }
 
@@ -198,8 +199,19 @@ config.window_frame = {
 -- Key bindings
 -- ---------------------------------------------------------------------------
 local act = wezterm.action
+local maximized = {}
 local keys = {
-  { key = 'Enter', mods = 'ALT', action = wezterm.action.ToggleFullScreen },
+  -- Maximize, not true fullscreen: mutter unredirects fullscreen windows and
+  -- transparency turns opaque black.
+  {
+    key = 'Enter',
+    mods = 'ALT',
+    action = wezterm.action_callback(function(window)
+      local id = window:window_id()
+      if maximized[id] then window:restore() else window:maximize() end
+      maximized[id] = not maximized[id]
+    end),
+  },
 
   -- Rename current tab (Alt+R)
   {
