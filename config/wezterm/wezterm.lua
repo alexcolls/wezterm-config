@@ -200,6 +200,20 @@ config.window_frame = {
 -- ---------------------------------------------------------------------------
 local act = wezterm.action
 local maximized = {}
+
+-- kalipso-cli (terminal IDE) uses Alt+arrows and Alt+1-4 for its own panes, and sets the
+-- KALIPSO user var while running. Send those keys through only then; otherwise run
+-- `fallback`. A user var, because this Flatpak build can't see host process names.
+local function kalipso_or(key, fallback)
+  return wezterm.action_callback(function(window, pane)
+    if pane:get_user_vars().KALIPSO == '1' and pane:is_alt_screen_active() then
+      window:perform_action(act.SendKey { key = key, mods = 'ALT' }, pane)
+    else
+      window:perform_action(fallback, pane)
+    end
+  end)
+end
+
 local keys = {
   -- Maximize, not true fullscreen: mutter unredirects fullscreen windows and
   -- transparency turns opaque black.
@@ -234,10 +248,10 @@ local keys = {
   { key = 'RightArrow', mods = 'SHIFT|ALT', action = wezterm.action.SplitPane { direction = 'Right', size = { Percent = 50 } } },
 
   -- Focus panes (Alt+Arrow)
-  { key = 'LeftArrow', mods = 'ALT', action = wezterm.action.ActivatePaneDirection 'Left' },
-  { key = 'RightArrow', mods = 'ALT', action = wezterm.action.ActivatePaneDirection 'Right' },
-  { key = 'UpArrow', mods = 'ALT', action = wezterm.action.ActivatePaneDirection 'Up' },
-  { key = 'DownArrow', mods = 'ALT', action = wezterm.action.ActivatePaneDirection 'Down' },
+  { key = 'LeftArrow', mods = 'ALT', action = kalipso_or('LeftArrow', act.ActivatePaneDirection 'Left') },
+  { key = 'RightArrow', mods = 'ALT', action = kalipso_or('RightArrow', act.ActivatePaneDirection 'Right') },
+  { key = 'UpArrow', mods = 'ALT', action = kalipso_or('UpArrow', act.ActivatePaneDirection 'Up') },
+  { key = 'DownArrow', mods = 'ALT', action = kalipso_or('DownArrow', act.ActivatePaneDirection 'Down') },
 
   -- Switch tabs (next/prev)
   { key = 'Tab', mods = 'CTRL', action = act.ActivateTabRelative(1) },
@@ -257,10 +271,12 @@ local keys = {
 }
 
 for i = 1, 10 do
+  local key = i == 10 and '0' or tostring(i)
+  local theme = wezterm.action.EmitEvent('trigger-theme-' .. tostring(i))
   keys[#keys + 1] = {
-    key = i == 10 and '0' or tostring(i),
+    key = key,
     mods = 'ALT',
-    action = wezterm.action.EmitEvent('trigger-theme-' .. tostring(i)),
+    action = i <= 4 and kalipso_or(key, theme) or theme,
   }
 end
 
