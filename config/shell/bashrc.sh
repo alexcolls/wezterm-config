@@ -48,6 +48,9 @@ fi
 # splits open where you already are. /etc/profile.d is not read by the
 # non-login shell WezTerm spawns, so source it here.
 [ -r /etc/profile.d/wezterm.sh ] && . /etc/profile.d/wezterm.sh
+# The Flatpak build ships no wezterm.sh, so also emit OSC 7 ourselves.
+__wezterm_osc7() { printf '\033]7;file://%s%s\033\\' "${HOSTNAME}" "${PWD// /%20}"; }
+case ";${PROMPT_COMMAND};" in *";__wezterm_osc7;"*) ;; *) PROMPT_COMMAND="__wezterm_osc7${PROMPT_COMMAND:+;$PROMPT_COMMAND}";; esac
 
 # --- prompt -----------------------------------------------------------------
 if command -v starship >/dev/null 2>&1; then
