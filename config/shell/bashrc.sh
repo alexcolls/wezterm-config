@@ -49,8 +49,8 @@ fi
 # non-login shell WezTerm spawns, so source it here.
 [ -r /etc/profile.d/wezterm.sh ] && . /etc/profile.d/wezterm.sh
 # The Flatpak build ships no wezterm.sh, so also emit OSC 7 ourselves.
-__wezterm_osc7() { printf '\033]7;file://%s%s\033\\' "${HOSTNAME}" "${PWD// /%20}"; }
-case ";${PROMPT_COMMAND};" in *";__wezterm_osc7;"*) ;; *) PROMPT_COMMAND="__wezterm_osc7${PROMPT_COMMAND:+;$PROMPT_COMMAND}";; esac
+# In PS1, not PROMPT_COMMAND: Kali's stock bashrc sets PROMPT_COMMAND=echo, which wipes the hook.
+case "$PS1" in *']7;file://'*) ;; *) PS1='\[\e]7;file://${HOSTNAME}${PWD// /%20}\e\\\]'"$PS1";; esac
 
 # --- prompt -----------------------------------------------------------------
 if command -v starship >/dev/null 2>&1; then
